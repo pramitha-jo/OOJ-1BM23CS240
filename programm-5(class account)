@@ -1,0 +1,118 @@
+/* input*/
+import java.util.*;
+class bank
+{
+    public static void main(String[] args)
+    {
+        sav_acc s=new sav_acc("prami",1234,"savings account",1500);
+        System.out.println("Name:"+s.name+"\nAccount no:"+s.acc_no+"\nBalance:"+s.balance+"\ntype of accoount"+ s.type);
+        s.deposit(500);
+        s.calc_interest();
+        s.withdrawl(500);
+        current_acc c=new current_acc("revanth",6789,"current account",3000);
+        System.out.println("\n\nName:"+c.name+"\nAccount no:"+c.acc_no+" \nBalance:"+c.balance+"\ntype of accoount:"+ c.type);
+        c.deposit(100);
+        c.withdrawl(1000);
+        c.check();
+        
+    }
+}
+class account
+{
+    String name;
+    int acc_no;
+    String type;
+    double balance;
+    account(String name, int acc_no,String type,double balance)
+    {
+        this.name=name;
+        this.acc_no=acc_no;
+        this.type=type;
+        this.balance=balance;
+    }
+    void deposit(int d_amt)
+    {
+        if(d_amt>0){
+            balance+=d_amt;
+            System.out.println("Amount credited: "+ d_amt);
+            System.out.println("Balance after deposit:"+balance);
+        }
+        else{
+            System.out.println("amount should be greater than 0");
+            
+        }
+        
+    }
+    void withdrawl(int w_amt)
+    {
+      if(w_amt>balance)
+      {
+          System.out.println("Insufficent Balance");
+      }
+      else{
+          balance-=w_amt;
+          System.out.println("withdrawing amount:"+w_amt);
+          System.out.println("Balance after withdraw: "+balance);
+      }
+    }
+}
+class sav_acc extends account
+{
+    double interest;
+    sav_acc(String name,int acc_no,String type,double balance)
+    {
+        super(name,acc_no,type,balance);
+    }
+    void calc_interest()
+    {
+        interest=balance*0.05;
+        System.out.println("interest :"+interest);
+        balance+=interest;
+        System.out.println("Balance with interest:"+ balance);
+    }
+}
+class current_acc extends account
+{
+    float min_balance;
+    int penalty;
+    current_acc(String name,int acc_no,String type,double balance)
+    {
+        super(name,acc_no,type,balance);
+        this.min_balance=300;
+        this.penalty=30;
+    }
+    void check(){
+        if(balance<min_balance){
+            balance-=penalty;
+            System.out.println("Penalty applied, now Balance is"+balance);
+            System.out.println("Always maintain minimun balance"+min_balance);
+            
+        }
+    }
+        
+}
+
+
+
+/*output*/
+Name:prami
+Account no:1234
+Balance:1500.0
+type of accoountsavings account
+Amount credited: 500
+Balance after deposit:2000.0
+interest :100.0
+Balance with interest:2100.0
+withdrawing amount:500
+Balance after withdraw: 1600.0
+
+
+Name:revanth
+Account no:6789 
+Balance:3000.0
+type of accoount:current account
+Amount credited: 100
+Balance after deposit:3100.0
+withdrawing amount:1000
+Balance after withdraw: 2100.0
+
