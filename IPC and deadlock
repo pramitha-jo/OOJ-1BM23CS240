@@ -1,0 +1,102 @@
+import java.io.*;
+import java.net.*;
+
+public class demo {
+
+    // Resources for deadlock demonstration
+    private static final Object lock1 = new Object();
+    private static final Object lock2 = new Object();
+
+    public static void main(String[] args) {
+
+        // Step 1: Start a server thread that listens for the client (IPC demonstration)
+        Thread serverThread = new Thread(() -> {
+            try (ServerSocket serverSocket = new ServerSocket(5000)) {
+                System.out.println("Server is listening on port 5000...");
+                Socket clientSocket = serverSocket.accept();  // Accept client connection
+                System.out.println("Client connected.");
+
+                // Read the message sent by the client
+                BufferedReader input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                String clientMessage = input.readLine();
+                System.out.println("Server received: " + clientMessage);
+
+                // Send a response back to the client
+                PrintWriter output = new PrintWriter(clientSocket.getOutputStream(), true);
+                output.println("Hello from server!");
+
+                clientSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        // Start the server thread
+        serverThread.start();
+
+        // Step 2: Start the client thread that communicates with the server (IPC demonstration)
+        Thread clientThread = new Thread(() -> {
+            try {
+                // Connect to the server
+                Socket socket = new Socket("localhost", 5000);
+
+                // Send a message to the server
+                PrintWriter output = new PrintWriter(socket.getOutputStream(), true);
+                output.println("Hello from client!");
+
+                // Receive a response from the server
+                BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                String serverResponse = input.readLine();
+                System.out.println("Client received: " + serverResponse);
+
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        // Start the client thread
+        clientThread.start();
+
+        // Step 3: Demonstrate Deadlock scenario using threads and synchronized blocks
+        Thread thread1 = new Thread(() -> {
+            synchronized (lock1) {
+                System.out.println("Thread 1: Holding lock 1...");
+
+                try {
+                    // Simulate some work
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                System.out.println("Thread 1: Waiting for lock 2...");
+                synchronized (lock2) {
+                    System.out.println("Thread 1: Acquired lock 2");
+                }
+            }
+        });
+
+        Thread thread2 = new Thread(() -> {
+            synchronized (lock2) {
+                System.out.println("Thread 2: Holding lock 2...");
+
+                try {
+                    // Simulate some work
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                System.out.println("Thread 2: Waiting for lock 1...");
+                synchronized (lock1) {
+                    System.out.println("Thread 2: Acquired lock 1");
+                }
+            }
+        });
+
+        // Start both threads that will cause a deadlock
+        thread1.start();
+        thread2.start();
+    }
+}
