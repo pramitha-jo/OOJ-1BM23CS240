@@ -1,0 +1,63 @@
+class WrongAgeException extends Exception
+{
+	public  WrongAgeException(String message)
+	{
+		super(message);
+	}
+}
+class father 
+{
+	int father_age;
+	public father(int age) throws WrongAgeException
+	{
+		this.father_age=age;
+		System.out.println("father's age:"+father_age);
+   		if(father_age<0)
+    			throw new WrongAgeException("age cannot be negitive");
+   
+	}
+}
+class son extends father
+{
+	int son_age;
+	public son(int father_age, int son_age) throws WrongAgeException
+	{ 	
+		super(father_age);
+		this.son_age=son_age;
+		System.out.println("son's age:"+son_age);
+		if(son_age<0)
+			throw new WrongAgeException("age cannot be negetive");
+		if(father_age<son_age)
+			throw new WrongAgeException("father's age cannot be less then son's age\n");
+	}
+}
+class son_demo
+{
+	public static void main(String args[])
+	{
+		try
+		{	System.out.println("object 1");
+			son s=new son(45,10);
+		}
+		catch(WrongAgeException e)
+		{
+			System.out.println("exception:"+e);
+		}
+		try
+		{	System.out.println("\nobject 2");
+			son s=new son(-45,-10);
+		}
+		catch(WrongAgeException e)
+		{
+			System.out.println("exception:"+e);
+		}
+		try
+		{	System.out.println("\nobject 3");
+			son s=new son(10,45);
+		}
+		catch(WrongAgeException e)
+		{
+			System.out.println("exception:"+e);
+		}
+	}
+}
