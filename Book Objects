@@ -1,0 +1,72 @@
+import java.util.*;
+class details
+{
+	String name;
+	String author;
+	double price;
+	int pages;
+	int i;
+	int n;
+	details(String name,String author, double price, int pages)
+	{
+		this.name=name;
+		this.author=author;
+		this.price=price;
+		this.pages=pages;
+	}
+	
+	void modify()
+	{
+		 Scanner s=new Scanner(System.in);
+		  System.out.println("enter book name:");
+		 name=s.nextLine();
+		  System.out.println("enter author:");
+		  author=s.nextLine();
+		  System.out.println("enter price:");
+		  price=s.nextDouble();
+		  System.out.println("enter pages:");
+		  pages=s.nextInt();
+		 
+	}
+	void setdetails()
+	{
+		this.name=name;
+		this.author=author;
+		this.price=price;
+		this.pages=pages;
+	}
+	void display()
+	{
+	System.out.println(" Name:"+name);
+	System.out.println("Author:"+author);
+	System.out.println("Price:"+price);
+	System.out.println("Pages:"+pages);
+	}
+	public String toString()
+	{
+	    return "Bookname:"+name+"	Author:"+author+"	Price:"+price+"	Pages:"+pages;
+	
+	}
+}
+	
+	
+class book
+{
+	public static void main(String args[])
+	{
+		int n;
+		int i;
+		Scanner s=new Scanner(System.in);
+		System.out.println("enter the no of books");
+		n=s.nextInt(); 
+		details d[]=new details[n];
+		for (i=0;i<n;i++)
+		{
+			details di=new details("Wings of fire","Abdul kalam",350,450);
+			di.modify();
+			di.setdetails();
+			di.display();
+			System.out.println(di);
+		}
+	}
+}
